@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ========================================GALERÍA MULTIMEDIA - COLEGIO MAGISTER 2B
 Archivo CSS independiente
    ======================================== */
@@ -308,4 +309,316 @@ img {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+=======
+/* ========================================GALERÍA MULTIMEDIA - COLEGIO MAGISTER 2B
+Archivo CSS independiente
+   ======================================== */
+
+/* Reset básico y configuración global */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ========================================CONTENEDOR PRINCIPAL
+   ======================================== */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ========================================
+CABECERA
+   ======================================== */
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header p {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+/* ========================================
+GRILLA DE ACTIVIDADES
+   ======================================== */
+
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.activity-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+.activity-title {
+    font-size: 1.4em;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    text-align: center;
+}
+
+.activity-title .icon {
+    font-size: 1.2em;
+}
+
+/* ========================================
+CONTADOR DE FOTOS
+   ======================================== */
+
+.photos-info {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 1em;
+    text-align: center;
+}
+
+/* ========================================
+GRILLA DE FOTOS
+   ======================================== */
+
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.photo-item {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    aspect-ratio: 1;
+}
+
+.photo-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none; /* Evita el menú contextual */
+    user-select: none; /* Evita la selección */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none; /* Evita el menú en iOS */
+    -webkit-user-drag: none; /* Evita arrastrar en WebKit */
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.photo-item .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.photo-item:hover .overlay {
+    opacity: 1;
+}
+
+.overlay .view-icon {
+    color: white;
+    font-size: 2em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* ========================================
+MODAL DE VISUALIZACIÓN
+   ======================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-content img {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none; /* Evita el menú contextual */
+    user-select: none; /* Evita la selección */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.close:hover {
+    color: #667eea;
+}
+
+/* ======================================== RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2em;
+    }
+    
+    .activities-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .container {
+        padding: 0 10px;
+    }
+    
+    body {
+        padding: 10px;
+    }
+
+    .photos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.8em;
+    }
+    
+    .header p {
+        font-size: 1em;
+    }
+    
+    .activity-card {
+        padding: 20px;
+    }
+
+    .photos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    }
+}
+
+/* ========================================ANIMACIONES
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.activity-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ========================================
+PROTECCIÓN CONTRA DESCARGA
+   ======================================== */
+
+/* Protección adicional contra descarga */
+img {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Evita el menú contextual */
+.modal, .photo-item {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+>>>>>>> 768223b0b380ff9e7994e964a817c00fdaed2808
 }
