@@ -10,6 +10,9 @@ let activities = {
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m1.jpg', name: 'foto1.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m2.jpg', name: 'foto2.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m3.jpg', name: 'foto3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m4.jpg', name: 'foto3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m5.jpg', name: 'foto3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m6.jpg', name: 'foto3.jpg' },
         ]
     },
     'Policias Escolares': {
