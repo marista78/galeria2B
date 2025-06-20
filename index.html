@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Multimedia - Colegio Magister Salón 2B</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📸 Galería Multimedia</h1>
+            <p>Colegio Magister Salón 2B - Actividades y Recuerdos 2025</p>
+        </div>
 
+        <div class="activities-grid" id="activitiesGrid">
+            <!-- Las actividades se generarán dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Modal para ver imágenes -->
+    <div id="photoModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <!-- Modal de advertencia -->
+    <div id="warningModal" class="warning-modal">
+        <div class="warning-content">
+            <div class="warning-icon">🚫</div>
+            <h2>Acción Prohibida</h2>
+            <p>El contenido de esta galería está protegido.<br>No se permite descargar, copiar o modificar las imágenes.</p>
+            <button onclick="closeWarningModal()" class="warning-btn">Entendido</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
