@@ -1,6 +1,6 @@
 // ========================================
 // GALERÍA MULTIMEDIA - COLEGIO MAGISTER 2B
-// Archivo JavaScript independiente - Versión Adaptativa
+// JavaScript Completo - Con protección y funcionalidad
 // ========================================
 
 // Datos de actividades - En producción estos vendrían del servidor
@@ -56,19 +56,6 @@ const activityIcons = {
 // ========================================
 
 /**
- * Determina la clase CSS apropiada según el número de fotos
- * @param {number} photoCount - Número de fotos
- * @returns {string} Clase CSS correspondiente
- */
-function getPhotosGridClass(photoCount) {
-    if (photoCount <= 10) {
-        return `photos-${photoCount}`;
-    } else {
-        return 'photos-many';
-    }
-}
-
-/**
  * Renderiza todas las actividades en la página
  */
 function renderActivities() {
@@ -78,8 +65,6 @@ function renderActivities() {
     Object.keys(activities).forEach(activityName => {
         const activity = activities[activityName];
         const icon = activityIcons[activityName] || '📚';
-        const photoCount = activity.photos.length;
-        const gridClass = getPhotosGridClass(photoCount);
         
         const activityCard = document.createElement('div');
         activityCard.className = 'activity-card';
@@ -90,10 +75,10 @@ function renderActivities() {
             </div>
             
             <div class="photos-info">
-                📷 Fotos (${photoCount})
+                📷 Fotos (${activity.photos.length})
             </div>
             
-            <div class="photos-grid ${gridClass}">
+            <div class="photos-grid">
                 ${renderPhotos(activity.photos)}
             </div>
         `;
@@ -102,14 +87,16 @@ function renderActivities() {
 }
 
 /**
- * Renderiza las fotos de una actividad
+ * Renderiza las fotos de una actividad con miniaturas uniformes
  * @param {Array} photos - Array de fotos
  * @returns {string} HTML generado
  */
 function renderPhotos(photos) {
     return photos.map((photo, index) => `
         <div class="photo-item" onclick="openModal('${photo.url}')">
-            <img src="${photo.url}" alt="Foto ${index + 1}" oncontextmenu="return false;">
+            <img src="${photo.url}" alt="Foto ${index + 1}" 
+                 oncontextmenu="return false;" 
+                 onerror="handleImageError(this)">
             <div class="overlay">
                 <span class="view-icon">👁️</span>
             </div>
@@ -117,23 +104,63 @@ function renderPhotos(photos) {
     `).join('');
 }
 
+/**
+ * Maneja errores de carga de imágenes en miniaturas
+ * @param {HTMLImageElement} img - Elemento de imagen
+ */
+function handleImageError(img) {
+    img.style.display = 'none';
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = `
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #666;
+        font-size: 12px;
+        text-align: center;
+        background: #f5f5f5;
+        border-radius: 8px;
+        flex-direction: column;
+    `;
+    errorDiv.innerHTML = '📷<br>No disponible';
+    
+    img.parentNode.insertBefore(errorDiv, img);
+}
+
 // ========================================
 // MODAL DE VISUALIZACIÓN
 // ========================================
 
 /**
- * Abre el modal para visualizar una foto
+ * Abre el modal para visualizar una foto en su tamaño original
  * @param {string} url - URL de la imagen
  */
 function openModal(url) {
     const modal = document.getElementById('photoModal');
     const modalContent = document.getElementById('modalContent');
     
-    modalContent.innerHTML = `<img src="${url}" alt="Foto" oncontextmenu="return false;">`;
-    modal.style.display = 'block';
+    modalContent.innerHTML = '';
     
-    // Evitar scroll en el body cuando el modal está abierto
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'Foto ampliada';
+    img.oncontextmenu = () => false;
+    img.onerror = () => handleModalImageError(img);
+    
+    modalContent.appendChild(img);
+    
+    modal.style.display = 'flex';
+    modal.classList.add('show');
+    
     document.body.style.overflow = 'hidden';
+    
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
 }
 
 /**
@@ -141,10 +168,39 @@ function openModal(url) {
  */
 function closeModal() {
     const modal = document.getElementById('photoModal');
-    modal.style.display = 'none';
+    modal.classList.remove('show');
     
-    // Restaurar scroll en el body
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+    
     document.body.style.overflow = 'auto';
+}
+
+/**
+ * Maneja errores de carga de imágenes en el modal
+ * @param {HTMLImageElement} img - Elemento de imagen
+ */
+function handleModalImageError(img) {
+    img.style.display = 'none';
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = `
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        min-width: 400px;
+        color: #666;
+        font-size: 18px;
+        text-align: center;
+        background: #f5f5f5;
+        border-radius: 10px;
+        flex-direction: column;
+    `;
+    errorDiv.innerHTML = '📷<br><br>Imagen no disponible<br>para visualización';
+    
+    img.parentNode.insertBefore(errorDiv, img);
 }
 
 // ========================================
@@ -157,6 +213,7 @@ function closeModal() {
 function preventContextMenu() {
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
+        showWarning();
         return false;
     });
 }
@@ -169,72 +226,85 @@ function preventKeyboardShortcuts() {
         // Prevenir Ctrl+S (Guardar), Ctrl+A (Seleccionar todo)
         if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 65)) {
             e.preventDefault();
+            showWarning();
             return false;
         }
         
         // Prevenir F12 (Herramientas de desarrollador)
         if (e.keyCode === 123) {
             e.preventDefault();
+            showWarning();
             return false;
         }
         
         // Prevenir Ctrl+Shift+I (Herramientas de desarrollador)
         if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
             e.preventDefault();
+            showWarning();
             return false;
         }
         
         // Prevenir Ctrl+U (Ver código fuente)
         if (e.ctrlKey && e.keyCode === 85) {
             e.preventDefault();
+            showWarning();
             return false;
         }
-    });
-}
-
-// ========================================
-// EVENT LISTENERS Y INICIALIZACIÓN
-// ========================================
-
-/**
- * Maneja el clic fuera del modal para cerrarlo
- */
-function setupModalClickOutside() {
-    window.onclick = function(event) {
-        const modal = document.getElementById('photoModal');
-        if (event.target === modal) {
+        
+        // Permitir Escape para cerrar modal
+        if (e.keyCode === 27) {
             closeModal();
-        }
-    }
-}
-
-/**
- * Maneja la tecla Escape para cerrar el modal
- */
-function setupEscapeKey() {
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
+            closeWarningModal();
         }
     });
 }
 
 /**
- * Inicializa toda la aplicación
+ * Previene arrastrar imágenes
  */
-function initializeApp() {
-    // Renderizar actividades
-    renderActivities();
+function preventDragAndDrop() {
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        showWarning();
+        return false;
+    });
     
-    // Configurar protecciones
-    preventContextMenu();
-    preventKeyboardShortcuts();
+    document.addEventListener('drop', function(e) {
+        e.preventDefault();
+        return false;
+    });
+}
+
+/**
+ * Muestra advertencia de protección
+ */
+function showWarning() {
+    const warningModal = document.getElementById('warningModal');
+    warningModal.style.display = 'block';
     
-    // Configurar eventos del modal
-    setupModalClickOutside();
-    setupEscapeKey();
-    
-    console.log('Galería Multimedia Adaptativa inicializada correctamente');
+    setTimeout(() => {
+        closeWarningModal();
+    }, 3000);
+}
+
+/**
+ * Cierra el modal de advertencia
+ */
+function closeWarningModal() {
+    const warningModal = document.getElementById('warningModal');
+    warningModal.style.display = 'none';
+}
+
+/**
+ * Protección adicional contra herramientas de desarrollador
+ */
+function protectDevTools() {
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 200 || 
+            window.outerWidth - window.innerWidth > 200) {
+            showWarning();
+        }
+    }, 1000);
 }
 
 // ========================================
@@ -273,7 +343,6 @@ function searchActivities(searchTerm) {
 
 /**
  * Función para cargar datos desde el servidor (ejemplo)
- * En producción, reemplazar con llamada real al backend
  */
 async function loadActivitiesFromServer() {
     try {
@@ -289,36 +358,61 @@ async function loadActivitiesFromServer() {
     }
 }
 
-/**
- * Función para añadir nuevas actividades dinámicamente
- * @param {string} activityName - Nombre de la actividad
- * @param {Array} photos - Array de fotos
- * @param {string} icon - Icono de la actividad
- */
-function addActivity(activityName, photos, icon = '📚') {
-    activities[activityName] = { photos };
-    activityIcons[activityName] = icon;
-    renderActivities();
-}
-
-/**
- * Función para eliminar una actividad
- * @param {string} activityName - Nombre de la actividad a eliminar
- */
-function removeActivity(activityName) {
-    delete activities[activityName];
-    delete activityIcons[activityName];
-    renderActivities();
-}
-
 // ========================================
 // INICIALIZACIÓN
 // ========================================
 
-// Inicializar cuando el DOM esté listo
+/**
+ * Inicializa la aplicación cuando el DOM está listo
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    // Renderizar actividades
+    renderActivities();
+    
+    // Aplicar protecciones
+    preventContextMenu();
+    preventKeyboardShortcuts();
+    preventDragAndDrop();
+    protectDevTools();
+    
+    // Mostrar información en consola
+    console.log(`Galería cargada con ${getTotalPhotosCount()} fotos`);
+    console.log('Protecciones activadas');
+    
+    // Protección adicional: limpiar consola cada 5 segundos
+    setInterval(() => {
+        console.clear();
+        console.log('🔒 Contenido protegido - Colegio Magister 2B');
+    }, 5000);
 });
 
-// Opcional: Recargar datos periódicamente (cada 5 minutos)
-// setInterval(loadActivitiesFromServer, 300000);
+// ========================================
+// PROTECCIÓN FINAL
+// ========================================
+
+// Prevenir inspección por consola
+(function() {
+    'use strict';
+    const devtools = {
+        open: false,
+        orientation: null
+    };
+    
+    const threshold = 160;
+    
+    setInterval(function() {
+        if (window.outerHeight - window.innerHeight > threshold || 
+            window.outerWidth - window.innerWidth > threshold) {
+            if (!devtools.open) {
+                devtools.open = true;
+                showWarning();
+            }
+        } else {
+            devtools.open = false;
+        }
+    }, 500);
+})();
+
+// Protección contra modificación del código
+Object.freeze(activities);
+Object.freeze(activityIcons);
