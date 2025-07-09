@@ -1,6 +1,6 @@
 // ========================================
 // GALERÍA MULTIMEDIA - COLEGIO MAGISTER 2B
-// JavaScript Completo - Con protección y funcionalidad
+// JavaScript Completo - Sin advertencias
 // ========================================
 
 // Datos de actividades - En producción estos vendrían del servidor
@@ -10,9 +10,9 @@ let activities = {
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m1.jpg', name: 'foto1.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m2.jpg', name: 'foto2.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m3.jpg', name: 'foto3.jpg' },
-            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m4.jpg', name: 'foto3.jpg' },
-            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m5.jpg', name: 'foto3.jpg' },
-            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m6.jpg', name: 'foto3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m4.jpg', name: 'foto4.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m5.jpg', name: 'foto5.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/m6.jpg', name: 'foto6.jpg' },
         ]
     },
     'Policias Escolares': {
@@ -98,7 +98,6 @@ function renderPhotos(photos) {
     return photos.map((photo, index) => `
         <div class="photo-item" onclick="openModal('${photo.url}')">
             <img src="${photo.url}" alt="Foto ${index + 1}" 
-                 oncontextmenu="return false;" 
                  onerror="handleImageError(this)">
             <div class="overlay">
                 <span class="view-icon">👁️</span>
@@ -149,7 +148,6 @@ function openModal(url) {
     const img = document.createElement('img');
     img.src = url;
     img.alt = 'Foto ampliada';
-    img.oncontextmenu = () => false;
     img.onerror = () => handleModalImageError(img);
     
     modalContent.appendChild(img);
@@ -207,110 +205,6 @@ function handleModalImageError(img) {
 }
 
 // ========================================
-// PROTECCIÓN CONTRA DESCARGA
-// ========================================
-
-/**
- * Previene el menú contextual (clic derecho)
- */
-function preventContextMenu() {
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        showWarning();
-        return false;
-    });
-}
-
-/**
- * Previene teclas de acceso directo para guardar/descargar
- */
-function preventKeyboardShortcuts() {
-    document.addEventListener('keydown', function(e) {
-        // Prevenir Ctrl+S (Guardar), Ctrl+A (Seleccionar todo)
-        if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 65)) {
-            e.preventDefault();
-            showWarning();
-            return false;
-        }
-        
-        // Prevenir F12 (Herramientas de desarrollador)
-        if (e.keyCode === 123) {
-            e.preventDefault();
-            showWarning();
-            return false;
-        }
-        
-        // Prevenir Ctrl+Shift+I (Herramientas de desarrollador)
-        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-            e.preventDefault();
-            showWarning();
-            return false;
-        }
-        
-        // Prevenir Ctrl+U (Ver código fuente)
-        if (e.ctrlKey && e.keyCode === 85) {
-            e.preventDefault();
-            showWarning();
-            return false;
-        }
-        
-        // Permitir Escape para cerrar modal
-        if (e.keyCode === 27) {
-            closeModal();
-            closeWarningModal();
-        }
-    });
-}
-
-/**
- * Previene arrastrar imágenes
- */
-function preventDragAndDrop() {
-    document.addEventListener('dragstart', function(e) {
-        e.preventDefault();
-        showWarning();
-        return false;
-    });
-    
-    document.addEventListener('drop', function(e) {
-        e.preventDefault();
-        return false;
-    });
-}
-
-/**
- * Muestra advertencia de protección
- */
-function showWarning() {
-    const warningModal = document.getElementById('warningModal');
-    warningModal.style.display = 'block';
-    
-    setTimeout(() => {
-        closeWarningModal();
-    }, 3000);
-}
-
-/**
- * Cierra el modal de advertencia
- */
-function closeWarningModal() {
-    const warningModal = document.getElementById('warningModal');
-    warningModal.style.display = 'none';
-}
-
-/**
- * Protección adicional contra herramientas de desarrollador
- */
-function protectDevTools() {
-    setInterval(() => {
-        if (window.outerHeight - window.innerHeight > 200 || 
-            window.outerWidth - window.innerWidth > 200) {
-            showWarning();
-        }
-    }, 1000);
-}
-
-// ========================================
 // FUNCIONES UTILITARIAS
 // ========================================
 
@@ -362,6 +256,22 @@ async function loadActivitiesFromServer() {
 }
 
 // ========================================
+// MANEJO DE EVENTOS DE TECLADO
+// ========================================
+
+/**
+ * Maneja eventos de teclado básicos
+ */
+function setupKeyboardEvents() {
+    document.addEventListener('keydown', function(e) {
+        // Permitir Escape para cerrar modal
+        if (e.keyCode === 27) {
+            closeModal();
+        }
+    });
+}
+
+// ========================================
 // INICIALIZACIÓN
 // ========================================
 
@@ -372,50 +282,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Renderizar actividades
     renderActivities();
     
-    // Aplicar protecciones
-    preventContextMenu();
-    preventKeyboardShortcuts();
-    preventDragAndDrop();
-    protectDevTools();
+    // Configurar eventos de teclado básicos
+    setupKeyboardEvents();
     
     // Mostrar información en consola
     console.log(`Galería cargada con ${getTotalPhotosCount()} fotos`);
-    console.log('Protecciones activadas');
-    
-    // Protección adicional: limpiar consola cada 5 segundos
-    setInterval(() => {
-        console.clear();
-        console.log('🔒 Contenido protegido - Colegio Magister 2B');
-    }, 5000);
+    console.log('Galería multimedia iniciada correctamente');
 });
-
-// ========================================
-// PROTECCIÓN FINAL
-// ========================================
-
-// Prevenir inspección por consola
-(function() {
-    'use strict';
-    const devtools = {
-        open: false,
-        orientation: null
-    };
-    
-    const threshold = 160;
-    
-    setInterval(function() {
-        if (window.outerHeight - window.innerHeight > threshold || 
-            window.outerWidth - window.innerWidth > threshold) {
-            if (!devtools.open) {
-                devtools.open = true;
-                showWarning();
-            }
-        } else {
-            devtools.open = false;
-        }
-    }, 500);
-})();
-
-// Protección contra modificación del código
-Object.freeze(activities);
-Object.freeze(activityIcons);
