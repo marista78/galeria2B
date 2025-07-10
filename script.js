@@ -54,6 +54,7 @@ let activities = {
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d4.jpeg', name: 'maestro4.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d5.jpeg', name: 'maestro5.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d6.jpeg', name: 'maestro6.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d7.jpeg', name: 'maestro7.jpg' },
         ]
     },
 };
