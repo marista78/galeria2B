@@ -36,9 +36,24 @@ let activities = {
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/p6.jpeg', name: 'teatro6.jpg' },
         ]
     },
-    'Día del padre': {
+    'Día del paseo': {
         photos: [
-            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/a1.jpeg', name: 'familia1.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/b1.jpeg', name: 'paseo1.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/b2.jpeg', name: 'paseo2.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/b3.jpeg', name: 'paseo3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/b4.jpeg', name: 'paseo4.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/b5.jpeg', name: 'paseo5.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/b6.jpeg', name: 'paseo6.jpg' },
+        ]
+    },
+    'Día del maestro': {
+        photos: [
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d1.jpeg', name: 'maestro1.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d2.jpeg', name: 'maestro2.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d3.jpeg', name: 'maestro3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d4.jpeg', name: 'maestro4.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d5.jpeg', name: 'maestro5.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d6.jpeg', name: 'maestro6.jpg' },
         ]
     },
 };
@@ -49,8 +64,8 @@ const activityIcons = {
     'Policias Escolares': '👮🏼‍♀️',
     'Dia de la Papa': '🍠',
     'Día del padre': '👨',
-    'Día de la Familia': '👨‍👩‍👧‍👦',
-    'Concurso de Ciencias': '🔬',
+    'Día del paseo': '👨‍👩‍👧‍👦',
+    'Dia del maestro': '🔬',
     'Graduación': '🎉'
 };
 
