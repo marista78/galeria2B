@@ -21,8 +21,13 @@
     <!-- Modal para ver imágenes -->
     <div id="photoModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
+        <button class="modal-nav prev" id="prevBtn" onclick="navigatePhoto(-1)">‹</button>
+        <button class="modal-nav next" id="nextBtn" onclick="navigatePhoto(1)">›</button>
         <div class="modal-content" id="modalContent"></div>
     </div>
+
+    <!-- Botón Scroll to Top -->
+    <div id="scrollToTop" class="scroll-to-top" onclick="scrollToTop()"></div>
 
     <script src="script.js"></script>
 </body>
