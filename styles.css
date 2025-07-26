@@ -1,6 +1,6 @@
 /* ========================================
 GALERÍA MULTIMEDIA - COLEGIO MAGISTER 2B
-CSS - Versión sin protecciones
+CSS - Versión con Scroll to Top Button
    ======================================== */
 
 /* Reset básico y configuración global */
@@ -217,6 +217,105 @@ MODAL DE VISUALIZACIÓN
 }
 
 /* ========================================
+BOTÓN SCROLL TO TOP
+   ======================================== */
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    z-index: 999;
+}
+
+.scroll-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.scroll-to-top:active {
+    transform: translateY(0);
+}
+
+.scroll-to-top::before {
+    content: '↑';
+    font-size: 16px;
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* ========================================
+FLECHAS DE NAVEGACIÓN DEL MODAL
+   ======================================== */
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #333;
+    transition: all 0.3s ease;
+    z-index: 1002;
+    backdrop-filter: blur(10px);
+}
+
+.modal-nav:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.modal-nav:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.modal-nav.prev {
+    left: 20px;
+}
+
+.modal-nav.next {
+    right: 20px;
+}
+
+.modal-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.modal-nav:disabled:hover {
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* ========================================
 ANIMACIONES
    ======================================== */
 
@@ -265,6 +364,31 @@ RESPONSIVE DESIGN
     .photo-item {
         height: 100px;
     }
+
+    .scroll-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .scroll-to-top::before {
+        font-size: 14px;
+    }
+
+    .modal-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .modal-nav.prev {
+        left: 15px;
+    }
+
+    .modal-nav.next {
+        right: 15px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -287,5 +411,30 @@ RESPONSIVE DESIGN
 
     .photo-item {
         height: 90px;
+    }
+
+    .scroll-to-top {
+        width: 30px;
+        height: 30px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .scroll-to-top::before {
+        font-size: 12px;
+    }
+
+    .modal-nav {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .modal-nav.prev {
+        left: 10px;
+    }
+
+    .modal-nav.next {
+        right: 10px;
     }
 }
