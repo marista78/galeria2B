@@ -1,6 +1,6 @@
 // ========================================
 // GALERÍA MULTIMEDIA - COLEGIO MAGISTER 2B
-// JavaScript Completo - Sin advertencias
+// JavaScript Completo - Con Scroll to Top
 // ========================================
 
 // Datos de actividades - En producción estos vendrían del servidor
@@ -54,7 +54,25 @@ let activities = {
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d4.jpeg', name: 'maestro4.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d5.jpeg', name: 'maestro5.jpg' },
             { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d6.jpeg', name: 'maestro6.jpg' },
-            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/d7.jpeg', name: 'maestro7.jpg' },
+        ]
+    },
+       'Fiestas Patrias': {
+        photos: [
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f1.jpeg', name: 'patrias1.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f2.jpeg', name: 'patrias2.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f3.jpeg', name: 'patrias3.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f4.jpeg', name: 'patrias4.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f5.jpeg', name: 'patrias5.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f6.jpeg', name: 'patrias6.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f7.jpeg', name: 'patrias7.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f8.jpeg', name: 'patrias8.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f9.jpeg', name: 'patrias9.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f10.jpeg', name: 'patrias10.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f11.jpeg', name: 'patrias11.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f12.jpeg', name: 'patrias12.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f13.jpeg', name: 'patrias13.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f14.jpeg', name: 'patrias14.jpg' },
+            { url: 'https://raw.githubusercontent.com/marista78/galeria2B/main/img/f15.jpeg', name: 'patrias15.jpg' },
         ]
     },
 };
@@ -67,8 +85,14 @@ const activityIcons = {
     'Día del padre': '👨',
     'Día del paseo': '👨‍👩‍👧‍👦',
     'Dia del maestro': '🔬',
+    'Fiestas Patrias': '🇵🇪​',
     'Graduación': '🎉'
 };
+
+// Variables globales para navegación del modal
+let currentActivity = '';
+let currentPhotoIndex = 0;
+let activitiesArray = [];
 
 // ========================================
 // FUNCIONES DE RENDERIZADO
@@ -80,8 +104,11 @@ const activityIcons = {
 function renderActivities() {
     const grid = document.getElementById('activitiesGrid');
     grid.innerHTML = '';
+    
+    // Crear array de actividades para navegación
+    activitiesArray = Object.keys(activities);
 
-    Object.keys(activities).forEach(activityName => {
+    activitiesArray.forEach(activityName => {
         const activity = activities[activityName];
         const icon = activityIcons[activityName] || '📚';
         
@@ -98,7 +125,7 @@ function renderActivities() {
             </div>
             
             <div class="photos-grid">
-                ${renderPhotos(activity.photos)}
+                ${renderPhotos(activity.photos, activityName)}
             </div>
         `;
         grid.appendChild(activityCard);
@@ -108,11 +135,12 @@ function renderActivities() {
 /**
  * Renderiza las fotos de una actividad con miniaturas uniformes
  * @param {Array} photos - Array de fotos
+ * @param {string} activityName - Nombre de la actividad
  * @returns {string} HTML generado
  */
-function renderPhotos(photos) {
+function renderPhotos(photos, activityName) {
     return photos.map((photo, index) => `
-        <div class="photo-item" onclick="openModal('${photo.url}')">
+        <div class="photo-item" onclick="openModal('${activityName}', ${index})">
             <img src="${photo.url}" alt="Foto ${index + 1}" 
                  onerror="handleImageError(this)">
             <div class="overlay">
@@ -152,17 +180,22 @@ function handleImageError(img) {
 // ========================================
 
 /**
- * Abre el modal para visualizar una foto en su tamaño original
- * @param {string} url - URL de la imagen
+ * Abre el modal para visualizar una foto con navegación
+ * @param {string} activityName - Nombre de la actividad
+ * @param {number} photoIndex - Índice de la foto
  */
-function openModal(url) {
+function openModal(activityName, photoIndex) {
+    currentActivity = activityName;
+    currentPhotoIndex = photoIndex;
+    
     const modal = document.getElementById('photoModal');
     const modalContent = document.getElementById('modalContent');
     
     modalContent.innerHTML = '';
     
+    const photo = activities[activityName].photos[photoIndex];
     const img = document.createElement('img');
-    img.src = url;
+    img.src = photo.url;
     img.alt = 'Foto ampliada';
     img.onerror = () => handleModalImageError(img);
     
@@ -172,6 +205,9 @@ function openModal(url) {
     modal.classList.add('show');
     
     document.body.style.overflow = 'hidden';
+    
+    // Actualizar visibilidad de botones de navegación
+    updateNavigationButtons();
     
     modal.onclick = function(event) {
         if (event.target === modal) {
@@ -192,6 +228,61 @@ function closeModal() {
     }, 300);
     
     document.body.style.overflow = 'auto';
+}
+
+/**
+ * Navega entre fotos y secciones
+ * @param {number} direction - Dirección: -1 para anterior, 1 para siguiente
+ */
+function navigatePhoto(direction) {
+    const currentPhotos = activities[currentActivity].photos;
+    const newIndex = currentPhotoIndex + direction;
+    
+    // Si estamos dentro de la misma sección
+    if (newIndex >= 0 && newIndex < currentPhotos.length) {
+        openModal(currentActivity, newIndex);
+        return;
+    }
+    
+    // Si necesitamos cambiar de sección
+    const currentActivityIndex = activitiesArray.indexOf(currentActivity);
+    let newActivityIndex;
+    
+    if (direction > 0) {
+        // Ir a siguiente sección
+        newActivityIndex = currentActivityIndex + 1;
+        if (newActivityIndex >= activitiesArray.length) {
+            return; // No hay más secciones
+        }
+        openModal(activitiesArray[newActivityIndex], 0); // Primera foto de la nueva sección
+    } else {
+        // Ir a sección anterior
+        newActivityIndex = currentActivityIndex - 1;
+        if (newActivityIndex < 0) {
+            return; // No hay secciones anteriores
+        }
+        const prevSectionPhotos = activities[activitiesArray[newActivityIndex]].photos;
+        openModal(activitiesArray[newActivityIndex], prevSectionPhotos.length - 1); // Última foto de la sección anterior
+    }
+}
+
+/**
+ * Actualiza la visibilidad de los botones de navegación
+ */
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    const currentActivityIndex = activitiesArray.indexOf(currentActivity);
+    const currentPhotos = activities[currentActivity].photos;
+    
+    // Mostrar/ocultar botón anterior
+    const hasPrev = currentPhotoIndex > 0 || currentActivityIndex > 0;
+    prevBtn.style.display = hasPrev ? 'flex' : 'none';
+    
+    // Mostrar/ocultar botón siguiente
+    const hasNext = currentPhotoIndex < currentPhotos.length - 1 || currentActivityIndex < activitiesArray.length - 1;
+    nextBtn.style.display = hasNext ? 'flex' : 'none';
 }
 
 /**
@@ -218,6 +309,34 @@ function handleModalImageError(img) {
     errorDiv.innerHTML = '📷<br><br>Imagen no disponible<br>para visualización';
     
     img.parentNode.insertBefore(errorDiv, img);
+}
+
+// ========================================
+// SCROLL TO TOP FUNCTIONALITY
+// ========================================
+
+/**
+ * Controla la visibilidad del botón scroll to top
+ */
+function toggleScrollButton() {
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    const scrollThreshold = 300; // Pixeles desde arriba para mostrar el botón
+    
+    if (window.pageYOffset > scrollThreshold) {
+        scrollToTopBtn.classList.add('show');
+    } else {
+        scrollToTopBtn.classList.remove('show');
+    }
+}
+
+/**
+ * Hace scroll suave hacia arriba
+ */
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 // ========================================
@@ -280,11 +399,33 @@ async function loadActivitiesFromServer() {
  */
 function setupKeyboardEvents() {
     document.addEventListener('keydown', function(e) {
-        // Permitir Escape para cerrar modal
-        if (e.keyCode === 27) {
-            closeModal();
+        const modal = document.getElementById('photoModal');
+        const isModalOpen = modal.style.display === 'flex';
+        
+        if (isModalOpen) {
+            switch(e.keyCode) {
+                case 27: // Escape
+                    closeModal();
+                    break;
+                case 37: // Flecha izquierda
+                    navigatePhoto(-1);
+                    break;
+                case 39: // Flecha derecha
+                    navigatePhoto(1);
+                    break;
+            }
         }
     });
+}
+
+/**
+ * Configura el scroll listener para el botón scroll to top
+ */
+function setupScrollListener() {
+    window.addEventListener('scroll', toggleScrollButton);
+    
+    // También verificar al cargar por si la página ya tiene scroll
+    toggleScrollButton();
 }
 
 // ========================================
@@ -301,7 +442,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar eventos de teclado básicos
     setupKeyboardEvents();
     
+    // Configurar scroll listener para el botón
+    setupScrollListener();
+    
     // Mostrar información en consola
     console.log(`Galería cargada con ${getTotalPhotosCount()} fotos`);
     console.log('Galería multimedia iniciada correctamente');
+    console.log('Botón scroll to top configurado');
+    console.log('Navegación entre fotos y secciones habilitada');
+    console.log('Controles de teclado: Escape (cerrar), ← → (navegar)');
 });
